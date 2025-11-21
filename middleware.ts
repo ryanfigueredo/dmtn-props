@@ -32,6 +32,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // Área administrativa - requer autenticação
+  // Exceção: /propostas/login é pública
+  if (pathname === '/propostas/login') {
+    return NextResponse.next()
+  }
+
   if (pathname.startsWith('/propostas') || pathname.startsWith('/api/propostas')) {
     const token = request.cookies.get('auth-token')?.value
 
