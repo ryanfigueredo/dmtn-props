@@ -56,11 +56,33 @@ export default function InteresseSucesso({
           <p>
             <strong>Nome:</strong> {dadosInteresse.nome}
           </p>
+          {dadosInteresse.tipoPessoa === 'PJ' && dadosInteresse.razaoSocial && (
+            <p>
+              <strong>Razão Social:</strong> {dadosInteresse.razaoSocial}
+            </p>
+          )}
+          <p>
+            <strong>{dadosInteresse.tipoPessoa === 'PF' ? 'CPF' : 'CNPJ'}:</strong>{' '}
+            {dadosInteresse.tipoPessoa === 'PF' ? dadosInteresse.cpf : dadosInteresse.cnpj}
+          </p>
           <p>
             <strong>Email:</strong> {dadosInteresse.email}
           </p>
           <p>
             <strong>Telefone:</strong> {dadosInteresse.telefone}
+          </p>
+          <p>
+            <strong>Endereço:</strong> {dadosInteresse.endereco}, {dadosInteresse.numero}
+            {dadosInteresse.complemento && `, ${dadosInteresse.complemento}`}
+          </p>
+          <p>
+            <strong>Bairro:</strong> {dadosInteresse.bairro}
+          </p>
+          <p>
+            <strong>Cidade/Estado:</strong> {dadosInteresse.cidade} - {dadosInteresse.estado}
+          </p>
+          <p>
+            <strong>CEP:</strong> {dadosInteresse.cep}
           </p>
           <p>
             <strong>Projeto:</strong> {proposta.projeto.nome}

@@ -8,7 +8,6 @@ import InteresseProposta, { DadosInteresse } from '@/components/InteressePropost
 import InteresseSucesso from '@/components/InteresseSucesso'
 import Logo from '@/components/Logo'
 import { Proposta } from '@/types/proposta'
-import { getPropostaBySlug } from '@/lib/propostas'
 
 export default function PropostaPage() {
   const params = useParams()
@@ -17,19 +16,11 @@ export default function PropostaPage() {
   const [interesseEnviado, setInteresseEnviado] = useState(false)
   const [dadosInteresse, setDadosInteresse] = useState<DadosInteresse | null>(null)
   const [valorAtual, setValorAtual] = useState<number>(0)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (slug) {
-      const propostaData = getPropostaBySlug(slug)
-      setProposta(propostaData)
-      
-      // Inicializar valor atual
-      if (propostaData) {
-        const valorInicial =
-          propostaData.precificacao.valorBase ||
-          propostaData.precificacao.pacoteSelecionado.valor
-        setValorAtual(valorInicial)
-      }
+      fetchProposta()
       
       // Verificar se já foi enviado interesse (localStorage)
       const interesseSalvo = localStorage.getItem(`interesse_${slug}`)
@@ -39,6 +30,29 @@ export default function PropostaPage() {
       }
     }
   }, [slug])
+
+  const fetchProposta = async () => {
+    try {
+      const response = await fetch(`/api/propostas/${slug}`)
+      if (!response.ok) {
+        setProposta(null)
+        return
+      }
+      const propostaData = await response.json()
+      setProposta(propostaData)
+      
+      // Inicializar valor atual
+      const valorInicial =
+        propostaData.precificacao.valorBase ||
+        propostaData.precificacao.pacoteSelecionado.valor
+      setValorAtual(valorInicial)
+    } catch (error) {
+      console.error('Erro ao carregar proposta:', error)
+      setProposta(null)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleEnviarInteresse = async (dados: DadosInteresse) => {
     if (!proposta) return
@@ -56,6 +70,17 @@ export default function PropostaPage() {
       console.error('Erro ao processar interesse:', error)
       alert('Erro ao processar interesse. Por favor, tente novamente.')
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-16 text-center">
+          <p className="text-gray-600">Carregando proposta...</p>
+        </div>
+      </div>
+    )
   }
 
   if (!proposta) {

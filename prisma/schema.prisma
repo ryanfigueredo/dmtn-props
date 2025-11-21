@@ -97,6 +97,17 @@ model Interesse {
   nome        String
   email       String
   telefone    String
+  tipoPessoa  String   @default("PF") // PF ou PJ
+  cpf         String?
+  cnpj        String?
+  razaoSocial String?
+  endereco    String
+  numero      String
+  complemento String?
+  bairro      String
+  cidade      String
+  estado      String
+  cep         String
   valorProjeto Float
   plataformaEscolhida String?
   dataInteresse DateTime @default(now())

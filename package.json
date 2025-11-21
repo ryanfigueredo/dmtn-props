@@ -10,6 +10,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx scripts/seed.ts",
+    "db:migrate-joao": "tsx scripts/migrate-joao.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {

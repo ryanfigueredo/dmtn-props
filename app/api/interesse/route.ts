@@ -10,10 +10,22 @@ export async function POST(request: NextRequest) {
   try {
     const dados: DadosInteresse = await request.json()
 
-    // Validação básica
-    if (!dados.nome || !dados.email || !dados.telefone) {
+    // Validação completa
+    if (
+      !dados.nome ||
+      !dados.email ||
+      !dados.telefone ||
+      !dados.endereco ||
+      !dados.numero ||
+      !dados.bairro ||
+      !dados.cidade ||
+      !dados.estado ||
+      !dados.cep ||
+      (dados.tipoPessoa === 'PF' && !dados.cpf) ||
+      (dados.tipoPessoa === 'PJ' && (!dados.cnpj || !dados.razaoSocial))
+    ) {
       return NextResponse.json(
-        { error: 'Dados incompletos' },
+        { error: 'Dados incompletos. Por favor, preencha todos os campos obrigatórios.' },
         { status: 400 }
       )
     }
@@ -64,6 +76,16 @@ export async function POST(request: NextRequest) {
                   <td style="padding: 8px 0; font-weight: bold; width: 120px;">Nome:</td>
                   <td style="padding: 8px 0;">${dados.nome}</td>
                 </tr>
+                ${dados.tipoPessoa === 'PJ' && dados.razaoSocial ? `
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Razão Social:</td>
+                  <td style="padding: 8px 0;">${dados.razaoSocial}</td>
+                </tr>
+                ` : ''}
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">${dados.tipoPessoa === 'PF' ? 'CPF' : 'CNPJ'}:</td>
+                  <td style="padding: 8px 0;">${dados.tipoPessoa === 'PF' ? dados.cpf : dados.cnpj}</td>
+                </tr>
                 <tr>
                   <td style="padding: 8px 0; font-weight: bold;">Email:</td>
                   <td style="padding: 8px 0;">
@@ -75,6 +97,22 @@ export async function POST(request: NextRequest) {
                   <td style="padding: 8px 0;">
                     <a href="tel:${dados.telefone}" style="color: #5E5BB5; text-decoration: none;">${dados.telefone}</a>
                   </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Endereço:</td>
+                  <td style="padding: 8px 0;">${dados.endereco}, ${dados.numero}${dados.complemento ? `, ${dados.complemento}` : ''}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Bairro:</td>
+                  <td style="padding: 8px 0;">${dados.bairro}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Cidade/Estado:</td>
+                  <td style="padding: 8px 0;">${dados.cidade} - ${dados.estado}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">CEP:</td>
+                  <td style="padding: 8px 0;">${dados.cep}</td>
                 </tr>
               </table>
             </div>
@@ -166,6 +204,17 @@ export async function POST(request: NextRequest) {
             nome: dados.nome,
             email: dados.email,
             telefone: dados.telefone,
+            tipoPessoa: dados.tipoPessoa,
+            cpf: dados.cpf,
+            cnpj: dados.cnpj,
+            razaoSocial: dados.razaoSocial,
+            endereco: dados.endereco,
+            numero: dados.numero,
+            complemento: dados.complemento,
+            bairro: dados.bairro,
+            cidade: dados.cidade,
+            estado: dados.estado,
+            cep: dados.cep,
             valorProjeto: dados.valorProjeto,
             plataformaEscolhida: dados.plataformaEscolhida,
           },
