@@ -32,7 +32,7 @@ export default function PropostasPage() {
     try {
       const response = await fetch('/api/propostas')
       if (response.status === 401) {
-        router.push('/propostas/login')
+        router.push('/proposta/login')
         return
       }
       const data = await response.json()
@@ -71,7 +71,7 @@ export default function PropostasPage() {
 
   const handleLogout = async () => {
     document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    router.push('/propostas/login')
+    router.push('/proposta/login')
   }
 
   return (
@@ -82,7 +82,7 @@ export default function PropostasPage() {
             <Logo className="h-8 w-auto" />
             <div className="flex items-center gap-4">
               <Link
-                href="/propostas/nova"
+                href="/proposta/nova"
                 className="bg-dmtn-purple hover:bg-dmtn-purple-dark text-white font-semibold py-2 px-4 rounded-lg transition-colors"
               >
                 + Nova Proposta
@@ -112,7 +112,7 @@ export default function PropostasPage() {
           <div className="bg-white rounded-lg shadow p-12 text-center">
             <p className="text-gray-500 mb-4">Nenhuma proposta cadastrada ainda.</p>
             <Link
-              href="/propostas/nova"
+              href="/proposta/nova"
               className="inline-block bg-dmtn-purple hover:bg-dmtn-purple-dark text-white font-semibold py-2 px-6 rounded-lg transition-colors"
             >
               Criar Primeira Proposta
@@ -178,7 +178,7 @@ export default function PropostasPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
-                        href={`/propostas/${proposta.id}`}
+                        href={`/proposta/${proposta.id}`}
                         className="text-dmtn-purple hover:text-dmtn-purple-dark mr-4"
                       >
                         Ver

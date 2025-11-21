@@ -83,7 +83,7 @@ export default function NovaPropostaPage() {
         throw new Error(data.error || 'Erro ao criar proposta')
       }
 
-      router.push('/propostas')
+      router.push('/proposta')
     } catch (err: any) {
       setError(err.message || 'Erro ao criar proposta')
       setLoading(false)
@@ -95,11 +95,11 @@ export default function NovaPropostaPage() {
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/propostas">
+            <Link href="/proposta">
               <Logo className="h-8 w-auto" />
             </Link>
             <Link
-              href="/propostas"
+              href="/proposta"
               className="text-gray-600 hover:text-gray-900 font-medium"
             >
               ← Voltar
@@ -355,7 +355,7 @@ export default function NovaPropostaPage() {
               {loading ? 'Salvando...' : 'Criar Proposta'}
             </button>
             <Link
-              href="/propostas"
+              href="/proposta"
               className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
             >
               Cancelar

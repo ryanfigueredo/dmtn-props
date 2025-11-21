@@ -32,7 +32,7 @@ export default function LoginPage() {
       }
 
       // Redirecionar para dashboard
-      router.push('/propostas')
+      router.push('/proposta')
       router.refresh()
     } catch (err) {
       setError('Erro ao conectar com o servidor')
