@@ -39,7 +39,10 @@ export async function middleware(request: NextRequest) {
 
   // Rotas públicas de propostas (visualização) - /proposta/[slug]
   // Exceção: /proposta/nova requer autenticação
-  if (pathname.startsWith("/proposta/") && !pathname.startsWith("/proposta/nova")) {
+  if (
+    pathname.startsWith("/proposta/") &&
+    !pathname.startsWith("/proposta/nova")
+  ) {
     return NextResponse.next();
   }
 
