@@ -4,10 +4,8 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  // Configuração para funcionar em subpath (opcional)
-  // Se você usar subdomínio, não precisa disso
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  // Configuração para subdomínio app.dmtn.com.br
+  // Não precisa de basePath quando usa subdomínio
 }
 
 module.exports = nextConfig
