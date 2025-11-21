@@ -178,18 +178,22 @@ export default function PropostasPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
-                        href={`/proposta/${proposta.id}`}
-                        className="text-dmtn-purple hover:text-dmtn-purple-dark mr-4"
-                      >
-                        Ver
-                      </Link>
-                      <Link
                         href={`/proposta/${proposta.slug}`}
                         target="_blank"
+                        className="text-dmtn-purple hover:text-dmtn-purple-dark mr-4"
+                      >
+                        Ver Link
+                      </Link>
+                      <button
+                        onClick={() => {
+                          const url = `${window.location.origin}/proposta/${proposta.slug}`
+                          navigator.clipboard.writeText(url)
+                          alert('Link copiado!')
+                        }}
                         className="text-gray-600 hover:text-gray-900"
                       >
-                        Link
-                      </Link>
+                        Copiar Link
+                      </button>
                     </td>
                   </tr>
                 ))}

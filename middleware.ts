@@ -23,42 +23,37 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect("https://dmtn.com.br", 301);
   }
 
+  // Rotas da API pública
+  if (
+    pathname.startsWith("/api/interesse") ||
+    pathname.startsWith("/api/auth/login") ||
+    pathname.startsWith("/api/propostas/") // API pública para buscar proposta por slug
+  ) {
+    return NextResponse.next();
+  }
+
   // Rotas públicas de propostas (visualização) - /proposta/[slug]
-  // Mas não /proposta, /proposta/login, /proposta/nova (essas são admin)
+  // Exceções: /proposta/login e /proposta/nova são tratadas abaixo
   if (pathname.startsWith("/proposta/")) {
-    // Se for /proposta/login, já foi tratado abaixo
+    // Login é público
     if (pathname === "/proposta/login") {
-      // Será tratado abaixo
+      return NextResponse.next();
     }
-    // Se for /proposta/nova ou subpastas, será tratado como admin abaixo
-    else if (pathname.startsWith("/proposta/nova")) {
+    // Nova proposta requer autenticação (será tratado abaixo)
+    if (pathname.startsWith("/proposta/nova")) {
       // Será tratado como admin abaixo
     }
-    // Caso contrário, é /proposta/[slug] - rota pública
+    // Qualquer outra rota /proposta/[slug] é pública
     else {
       return NextResponse.next();
     }
   }
 
-  // Rotas da API pública
-  if (
-    pathname.startsWith("/api/interesse") ||
-    pathname.startsWith("/api/auth/login")
-  ) {
-    return NextResponse.next();
-  }
-
-  // Área administrativa - requer autenticação
-  // Exceção: /proposta/login é pública
-  if (pathname === "/proposta/login") {
-    return NextResponse.next();
-  }
-
-  // Rotas admin: /proposta, /proposta/nova, /api/propostas
+  // Rotas admin: /proposta (lista), /proposta/nova, /api/propostas (sem slug)
   if (
     pathname === "/proposta" ||
     pathname.startsWith("/proposta/nova") ||
-    pathname.startsWith("/api/propostas")
+    pathname === "/api/propostas"
   ) {
     const token = request.cookies.get("auth-token")?.value;
 
