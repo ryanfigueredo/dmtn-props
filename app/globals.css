@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --dmtn-purple-dark: #4A4A8A;
+  --dmtn-purple: #5E5BB5;
+  --dmtn-purple-light: #7B78D4;
+  --dmtn-purple-lighter: #E8E7F5;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+}
+
+* {
+  font-family: var(--font-space-grotesk);
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+

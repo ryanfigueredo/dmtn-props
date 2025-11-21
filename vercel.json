@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/proposta/:slug",
+      "destination": "/proposta/[slug]"
+    }
+  ]
+}
+
