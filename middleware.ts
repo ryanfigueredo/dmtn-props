@@ -25,16 +25,18 @@ export async function middleware(request: NextRequest) {
 
   // Rotas públicas de propostas (visualização) - /proposta/[slug]
   // Mas não /proposta, /proposta/login, /proposta/nova (essas são admin)
-  if (
-    pathname.startsWith("/proposta/") &&
-    pathname !== "/proposta/login" &&
-    pathname !== "/proposta/nova" &&
-    !pathname.match(/^\/proposta\/[^\/]+$/) // Não é exatamente /proposta/[slug]
-  ) {
-    // Verificar se é uma rota dinâmica [slug] (tem apenas um segmento após /proposta/)
-    const segments = pathname.split("/").filter(Boolean);
-    if (segments.length === 2 && segments[0] === "proposta") {
-      return NextResponse.next(); // É /proposta/[slug] - pública
+  if (pathname.startsWith("/proposta/")) {
+    // Se for /proposta/login, já foi tratado abaixo
+    if (pathname === "/proposta/login") {
+      // Será tratado abaixo
+    }
+    // Se for /proposta/nova ou subpastas, será tratado como admin abaixo
+    else if (pathname.startsWith("/proposta/nova")) {
+      // Será tratado como admin abaixo
+    }
+    // Caso contrário, é /proposta/[slug] - rota pública
+    else {
+      return NextResponse.next();
     }
   }
 
