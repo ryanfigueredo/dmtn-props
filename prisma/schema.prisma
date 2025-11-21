@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  nome      String
+  role      String   @default("admin") // admin, user
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Proposta {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  clienteNome String
+  clienteEmail String?
+  clienteTelefone String?
+  clienteEmpresa String?
+  
+  // Projeto
+  projetoNome        String
+  projetoDescricao   String   @db.Text
+  prazo              String
+  
+  // Precificação
+  valorBase          Float
+  valorFinal         Float
+  
+  // Plataforma
+  plataformaEscolhida String? // web, app-lojas, web-app
+  
+  // Status
+  status            String   @default("pendente") // pendente, em_andamento, concluida, cancelada
+  
+  // Contrato
+  contratoObjeto    String?  @db.Text
+  contratoTermos    String?  @db.Text
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  funcionalidades   Funcionalidade[]
+  produtos          Produto[]
+  interesses       Interesse[]
+
+  @@map("propostas")
+}
+
+model Funcionalidade {
+  id          String   @id @default(cuid())
+  propostaId  String
+  titulo      String
+  descricao   String   @db.Text
+  complexidade String?  // Baixa, Média, Alta
+  tempoEstimado String?
+  ordem       Int      @default(0)
+  
+  proposta    Proposta @relation(fields: [propostaId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("funcionalidades")
+}
+
+model Produto {
+  id          String   @id @default(cuid())
+  propostaId  String
+  nome        String
+  descricao   String   @db.Text
+  ordem       Int      @default(0)
+  
+  proposta    Proposta @relation(fields: [propostaId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("produtos")
+}
+
+model Interesse {
+  id          String   @id @default(cuid())
+  propostaId  String
+  nome        String
+  email       String
+  telefone    String
+  valorProjeto Float
+  plataformaEscolhida String?
+  dataInteresse DateTime @default(now())
+  
+  proposta    Proposta @relation(fields: [propostaId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("interesses")
+}

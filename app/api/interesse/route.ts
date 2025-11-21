@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { DadosInteresse } from '@/components/InteresseProposta'
+import { prisma } from '@/lib/prisma'
 
 // Inicializar Resend apenas se a API key estiver disponível
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
@@ -144,6 +145,35 @@ export async function POST(request: NextRequest) {
       }
     } else {
       console.warn('RESEND_API_KEY não configurada - email não será enviado')
+    }
+
+    // Salvar no banco de dados
+    try {
+      // Buscar proposta pelo slug ou ID
+      const proposta = await prisma.proposta.findFirst({
+        where: {
+          OR: [
+            { id: dados.propostaId },
+            { slug: dados.propostaId },
+          ],
+        },
+      })
+
+      if (proposta) {
+        await prisma.interesse.create({
+          data: {
+            propostaId: proposta.id,
+            nome: dados.nome,
+            email: dados.email,
+            telefone: dados.telefone,
+            valorProjeto: dados.valorProjeto,
+            plataformaEscolhida: dados.plataformaEscolhida,
+          },
+        })
+      }
+    } catch (dbError) {
+      console.error('Erro ao salvar interesse no banco:', dbError)
+      // Continua mesmo se falhar o banco
     }
 
     // Log para debug
