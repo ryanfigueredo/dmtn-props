@@ -1,78 +1,79 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import Logo from '@/components/Logo'
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Logo from "@/components/Logo";
 
 interface Proposta {
-  id: string
-  slug: string
-  clienteNome: string
-  projetoNome: string
-  valorFinal: number
-  status: string
-  createdAt: string
+  id: string;
+  slug: string;
+  clienteNome: string;
+  projetoNome: string;
+  valorFinal: number;
+  status: string;
+  createdAt: string;
   _count: {
-    interesses: number
-  }
+    interesses: number;
+  };
 }
 
 export default function PropostasPage() {
-  const router = useRouter()
-  const [propostas, setPropostas] = useState<Proposta[]>([])
-  const [loading, setLoading] = useState(true)
+  const router = useRouter();
+  const [propostas, setPropostas] = useState<Proposta[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPropostas()
+    fetchPropostas();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const fetchPropostas = async () => {
     try {
-      const response = await fetch('/api/propostas')
+      const response = await fetch("/api/propostas");
       if (response.status === 401) {
-        router.push('/proposta/login')
-        return
+        router.push("/proposta/login");
+        return;
       }
-      const data = await response.json()
-      setPropostas(data)
+      const data = await response.json();
+      setPropostas(data);
     } catch (error) {
-      console.error('Erro ao carregar propostas:', error)
+      console.error("Erro ao carregar propostas:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value)
-  }
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })
-  }
+    return new Date(date).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      pendente: 'bg-yellow-100 text-yellow-800',
-      em_andamento: 'bg-blue-100 text-blue-800',
-      concluida: 'bg-green-100 text-green-800',
-      cancelada: 'bg-red-100 text-red-800',
-    }
-    return colors[status] || 'bg-gray-100 text-gray-800'
-  }
+      pendente: "bg-yellow-100 text-yellow-800",
+      em_andamento: "bg-blue-100 text-blue-800",
+      concluida: "bg-green-100 text-green-800",
+      cancelada: "bg-red-100 text-red-800",
+    };
+    return colors[status] || "bg-gray-100 text-gray-800";
+  };
 
   const handleLogout = async () => {
-    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    router.push('/proposta/login')
-  }
+    document.cookie =
+      "auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    router.push("/proposta/login");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,8 +101,12 @@ export default function PropostasPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-dmtn-purple-dark mb-2">Propostas</h1>
-          <p className="text-gray-600">Gerencie todas as propostas comerciais</p>
+          <h1 className="text-3xl font-bold text-dmtn-purple-dark mb-2">
+            Propostas
+          </h1>
+          <p className="text-gray-600">
+            Gerencie todas as propostas comerciais
+          </p>
         </div>
 
         {loading ? (
@@ -110,7 +115,9 @@ export default function PropostasPage() {
           </div>
         ) : propostas.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-12 text-center">
-            <p className="text-gray-500 mb-4">Nenhuma proposta cadastrada ainda.</p>
+            <p className="text-gray-500 mb-4">
+              Nenhuma proposta cadastrada ainda.
+            </p>
             <Link
               href="/proposta/nova"
               className="inline-block bg-dmtn-purple hover:bg-dmtn-purple-dark text-white font-semibold py-2 px-6 rounded-lg transition-colors"
@@ -150,11 +157,17 @@ export default function PropostasPage() {
                 {propostas.map((proposta) => (
                   <tr key={proposta.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{proposta.clienteNome}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {proposta.clienteNome}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900">{proposta.projetoNome}</div>
-                      <div className="text-sm text-gray-500">/{proposta.slug}</div>
+                      <div className="text-sm text-gray-900">
+                        {proposta.projetoNome}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        /{proposta.slug}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -167,7 +180,7 @@ export default function PropostasPage() {
                           proposta.status
                         )}`}
                       >
-                        {proposta.status.replace('_', ' ')}
+                        {proposta.status.replace("_", " ")}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -186,9 +199,9 @@ export default function PropostasPage() {
                       </Link>
                       <button
                         onClick={() => {
-                          const url = `${window.location.origin}/proposta/${proposta.slug}`
-                          navigator.clipboard.writeText(url)
-                          alert('Link copiado!')
+                          const url = `${window.location.origin}/proposta/${proposta.slug}`;
+                          navigator.clipboard.writeText(url);
+                          alert("Link copiado!");
                         }}
                         className="text-gray-600 hover:text-gray-900"
                       >
@@ -203,6 +216,5 @@ export default function PropostasPage() {
         )}
       </main>
     </div>
-  )
+  );
 }
-

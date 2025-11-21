@@ -32,21 +32,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Login é público
+  if (pathname === "/proposta/login") {
+    return NextResponse.next();
+  }
+
   // Rotas públicas de propostas (visualização) - /proposta/[slug]
-  // Exceções: /proposta/login e /proposta/nova são tratadas abaixo
-  if (pathname.startsWith("/proposta/")) {
-    // Login é público
-    if (pathname === "/proposta/login") {
-      return NextResponse.next();
-    }
-    // Nova proposta requer autenticação (será tratado abaixo)
-    if (pathname.startsWith("/proposta/nova")) {
-      // Será tratado como admin abaixo
-    }
-    // Qualquer outra rota /proposta/[slug] é pública
-    else {
-      return NextResponse.next();
-    }
+  // Exceção: /proposta/nova requer autenticação
+  if (pathname.startsWith("/proposta/") && !pathname.startsWith("/proposta/nova")) {
+    return NextResponse.next();
   }
 
   // Rotas admin: /proposta (lista), /proposta/nova, /api/propostas (sem slug)
