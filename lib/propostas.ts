@@ -290,8 +290,8 @@ export function getPropostaBySlug(slug: string): Proposta | null {
             autenticacao: 'NextAuth.js',
             hospedagem: 'Vercel',
           },
-          prazo: '60-90 dias úteis',
-          valorTotal: 25000,
+          prazo: '45-60 dias úteis',
+          valorTotal: 15000,
           formaPagamento: {
             tipo: 'parcelado',
             parcelas: 12,
