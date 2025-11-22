@@ -4,11 +4,12 @@ import { gerarContratoPadrao } from '@/lib/contratoTemplate'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params
     const proposta = await prisma.proposta.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
       include: {
         funcionalidades: {
           orderBy: { ordem: 'asc' },
